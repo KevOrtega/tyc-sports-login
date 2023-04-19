@@ -4,6 +4,7 @@ type inputProps = {
 	name?: string;
 	onChange?: React.ReactEventHandler<HTMLInputElement>;
 	className?: string;
+	value?: string;
 };
 
 export default function Input({
@@ -14,21 +15,21 @@ export default function Input({
 	const input_types = {
 		email: () => (
 			<input
-				className={`bg-white p-1 px-2 w-full rounded ${className}`}
+				className={`bg-white py-2 px-4 w-full outline-none text-black rounded ${className}`}
 				type="text"
 				{...props}
 			/>
 		),
 		password: () => (
 			<input
-				className={`bg-white p-1 px-2 w-full rounded ${className}`}
+				className={`bg-white py-2 px-4 w-full outline-none text-black rounded ${className}`}
 				type="text"
 				{...props}
 			/>
 		),
 		text: () => (
 			<input
-				className={`bg-white p-1 px-2 w-full rounded ${className}`}
+				className={`bg-white py-2 px-4 w-full outline-none text-black rounded ${className}`}
 				type="text"
 				{...props}
 			/>

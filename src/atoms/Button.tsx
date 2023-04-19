@@ -1,7 +1,7 @@
 type buttonProps = {
-	onClick: React.MouseEventHandler<HTMLButtonElement>;
+	onClick?: React.MouseEventHandler<HTMLButtonElement>;
 	children: React.ReactNode;
-	type?: "button" | "facebook" | "google" | "submit";
+	type?: "button" | "facebook" | "google" | "login-redirect" | "submit";
 	className?: string;
 };
 
@@ -25,9 +25,16 @@ export default function Button({
 				{...props}
 			/>
 		),
+		"login-redirect": () => (
+			<button
+				className={`cursor-default p-3 outline-none text-sky-500 w-min transition-colors hover:text-sky-300 active:text-sky-500 ${className}`}
+				type="button"
+				{...props}
+			/>
+		),
 		submit: () => (
 			<button
-				className={`cursor-default w-full p-3 outline-none bg-red-500 rounded ${className}`}
+				className={`cursor-default w-full p-3 outline-none bg-red-500 rounded transition-colors hover:bg-red-400 active:bg-red-500 ${className}`}
 				type="submit"
 				{...props}
 			/>
