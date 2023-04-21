@@ -5,6 +5,7 @@ type inputProps = {
 	onChange?: React.ReactEventHandler<HTMLInputElement>;
 	className?: string;
 	value?: string;
+	title?: string;
 };
 
 export default function Input({

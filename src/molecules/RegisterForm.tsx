@@ -3,21 +3,43 @@ import Button from "@/atoms/Button";
 import Input from "@/atoms/Input";
 import Title from "@/atoms/Title";
 import { useState } from "react";
+import { iRegisterCredentials } from "@/interface/user";
+import { useRouter } from "next/router";
+import { emailValidator, passwordValidator } from "@/validation";
 
 export default function RegisterForm() {
-	const [credentials, setCredentials] = useState({
+	const router = useRouter();
+	const [credentials, setCredentials] = useState<iRegisterCredentials>({
 		email: "",
 		password: "",
 		repeatPassword: "",
 	});
+
+	const validateCredentials = () => {
+		if (!emailValidator(credentials.email))
+			throw new Error("email must be valid");
+		if (!passwordValidator(credentials.password))
+			throw new Error(
+				"password is not valid (must have 8 characters, 1 capital letter, 1 lowercase and 1 number)"
+			);
+		if (credentials.repeatPassword !== credentials.password)
+			throw new Error("passwords not match");
+	};
 
 	const handleChange: React.ChangeEventHandler<HTMLInputElement> = ({
 		target: { value, name },
 	}) => setCredentials({ ...credentials, [name]: value });
 
 	const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
-		e.preventDefault();
-		await axios.post("/api/users/register", credentials);
+		try {
+			e.preventDefault();
+			validateCredentials();
+			await axios.post("/api/users/register", credentials);
+		} catch (error) {
+			alert(`${error}`);
+		} finally {
+			router.push("/dashboard");
+		}
 	};
 
 	return (
@@ -27,7 +49,11 @@ export default function RegisterForm() {
 				Registrate con tu email
 			</span>
 			<Input
-				className="my-1"
+				className={`my-1 ${
+					!!credentials.email.length &&
+					!emailValidator(credentials.email) &&
+					"border-b-4 border-red-500"
+				}`}
 				type="email"
 				placeholder="email"
 				name="email"
@@ -35,7 +61,11 @@ export default function RegisterForm() {
 				value={credentials.email}
 			/>
 			<Input
-				className="my-1"
+				className={`my-1 ${
+					!!credentials.password.length &&
+					!passwordValidator(credentials.password) &&
+					"border-b-4 border-red-500"
+				}`}
 				type="password"
 				placeholder="password"
 				name="password"
@@ -43,7 +73,12 @@ export default function RegisterForm() {
 				value={credentials.password}
 			/>
 			<Input
-				className="my-1"
+				className={`my-1 ${
+					!!credentials.repeatPassword.length &&
+					(!passwordValidator(credentials.repeatPassword) ||
+						credentials.repeatPassword !== credentials.password) &&
+					"border-b-4 border-red-500"
+				}`}
 				type="password"
 				placeholder="repeat password"
 				name="repeatPassword"
