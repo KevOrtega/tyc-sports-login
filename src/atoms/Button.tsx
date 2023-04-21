@@ -41,7 +41,7 @@ export default function Button({
 		),
 		button: () => (
 			<button
-				className={`cursor-default w-full p-3 outline-none ${className}`}
+				className={`cursor-default w-min p-3 outline-none ${className}`}
 				type="button"
 				{...props}
 			/>

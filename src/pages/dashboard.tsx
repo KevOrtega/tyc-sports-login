@@ -1,4 +1,5 @@
 import Button from "@/atoms/Button";
+import Title from "@/atoms/Title";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -20,6 +21,7 @@ export default function dashboard() {
 		try {
 			await axios.post("/api/users/logout");
 			router.push("/");
+			alert("logged out");
 		} catch (error) {
 			alert("Could not log out");
 		}
@@ -27,9 +29,14 @@ export default function dashboard() {
 
 	return (
 		<div>
-			<h1>Welcome, you were successfully logged</h1>
+			<Title>Welcome, you were successfully logged</Title>
 			<p>your email: {user.email}</p>
-			<Button onClick={handleLogout}>logout</Button>
+			<Button
+				className="capitalize shadow font-bold m-3 rounded whitespace-nowrap transition-shadow hover:shadow-md active:shadow"
+				onClick={handleLogout}
+			>
+				log out
+			</Button>
 		</div>
 	);
 }

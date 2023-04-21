@@ -39,8 +39,8 @@ export default function RegisterForm() {
 				password: credentials.password,
 			});
 			router.push("/dashboard");
-		} catch (error) {
-			alert(`${error}`);
+		} catch (error: any) {
+			alert(`${error.response?.data || error.message || error}`);
 		}
 	};
 

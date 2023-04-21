@@ -1,6 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { database } from "@/pages/api/_database";
-import { createUser, serializeUser } from "@/pages/api/_services/users";
+import {
+	createUser,
+	getUserByEmail,
+	serializeUser,
+} from "@/pages/api/_services/users";
 
 database();
 
@@ -11,6 +15,10 @@ export default async function registerHandler(
 	try {
 		if (req.method !== "POST")
 			throw new Error("POST method is the only supported");
+
+		const is_user_already_registered = await getUserByEmail(req.body.email);
+		if (is_user_already_registered)
+			throw new Error(`user with email ${req.body.email} already exists`);
 
 		const user = await createUser({
 			email: req.body.email,
