@@ -23,7 +23,7 @@ export default function Input({
 		password: () => (
 			<input
 				className={`bg-white py-2 px-4 w-full outline-none text-black rounded ${className}`}
-				type="text"
+				type="password"
 				{...props}
 			/>
 		),

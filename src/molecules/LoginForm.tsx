@@ -1,8 +1,9 @@
+import axios from "axios";
+import { useState } from "react";
 import Button from "@/atoms/Button";
 import Image from "@/atoms/Image";
 import Input from "@/atoms/Input";
 import Title from "@/atoms/Title";
-import { useState } from "react";
 
 export default function LoginForm() {
 	const [credentials, setCredentials] = useState({
@@ -14,9 +15,9 @@ export default function LoginForm() {
 		target: { name, value },
 	}) => setCredentials({ ...credentials, [name]: value });
 
-	const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+	const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
 		e.preventDefault();
-		alert("logged");
+		await axios.post("/api/users/login", credentials);
 	};
 
 	return (

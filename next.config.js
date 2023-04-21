@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
-}
+	reactStrictMode: true,
+	env: {
+		mongo_user: "kevortegadev",
+		mongo_password: "loo5z4n5wEp5PhcI",
+	},
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

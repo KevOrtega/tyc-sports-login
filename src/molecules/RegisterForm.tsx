@@ -1,3 +1,4 @@
+import axios from "axios";
 import Button from "@/atoms/Button";
 import Input from "@/atoms/Input";
 import Title from "@/atoms/Title";
@@ -14,9 +15,9 @@ export default function RegisterForm() {
 		target: { value, name },
 	}) => setCredentials({ ...credentials, [name]: value });
 
-	const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+	const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
 		e.preventDefault();
-		alert("registered");
+		await axios.post("/api/users/register", credentials);
 	};
 
 	return (
