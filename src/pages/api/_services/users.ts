@@ -42,6 +42,15 @@ export function verifyUserToken(cookies: Partial<{ [key: string]: string }>) {
 		_doc: iUser;
 	};
 	if (!user) throw new Error("token is not valid");
-	console.log(user);
 	return user;
+}
+
+export function expireToken() {
+	return serialize("user_token", "", {
+		httpOnly: true,
+		secure: process.env.NODE_ENV === "production",
+		sameSite: "strict",
+		maxAge: 0,
+		path: "/",
+	});
 }

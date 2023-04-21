@@ -34,11 +34,13 @@ export default function RegisterForm() {
 		try {
 			e.preventDefault();
 			validateCredentials();
-			await axios.post("/api/users/register", credentials);
+			await axios.post("/api/users/register", {
+				email: credentials.email,
+				password: credentials.password,
+			});
+			router.push("/dashboard");
 		} catch (error) {
 			alert(`${error}`);
-		} finally {
-			router.push("/dashboard");
 		}
 	};
 

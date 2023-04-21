@@ -33,10 +33,9 @@ export default function LoginForm() {
 			e.preventDefault();
 			validateCredentials();
 			await axios.post("/api/users/login", credentials);
+			router.push("/dashboard");
 		} catch (error) {
 			alert(`${error}`);
-		} finally {
-			router.push("/dashboard");
 		}
 	};
 
