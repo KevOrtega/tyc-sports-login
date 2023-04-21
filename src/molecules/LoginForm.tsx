@@ -4,8 +4,10 @@ import Button from "@/atoms/Button";
 import Image from "@/atoms/Image";
 import Input from "@/atoms/Input";
 import Title from "@/atoms/Title";
+import { useRouter } from "next/router";
 
 export default function LoginForm() {
+	const router = useRouter();
 	const [credentials, setCredentials] = useState({
 		email: "",
 		password: "",
@@ -16,8 +18,12 @@ export default function LoginForm() {
 	}) => setCredentials({ ...credentials, [name]: value });
 
 	const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
-		e.preventDefault();
-		await axios.post("/api/users/login", credentials);
+		try {
+			e.preventDefault();
+			await axios.post("/api/users/login", credentials);
+		} finally {
+			router.push("/dashboard");
+		}
 	};
 
 	return (

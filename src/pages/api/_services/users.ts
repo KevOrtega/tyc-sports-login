@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import jwt, { verify } from "jsonwebtoken";
 import { serialize } from "cookie";
 import { iUser } from "@/interface/user";
 import User from "@/pages/api/_database/models/User";
@@ -28,11 +28,20 @@ export function serializeUser(user: iUser) {
 		"secret"
 	);
 
-	return serialize("login_token", token, {
+	return serialize("user_token", token, {
 		httpOnly: true,
 		secure: process.env.NODE_ENV === "production",
 		sameSite: "strict",
 		maxAge: 1000 * 60 * 60 * 24 * 30,
 		path: "/",
 	});
+}
+
+export function verifyUserToken(cookies: Partial<{ [key: string]: string }>) {
+	const { _doc: user } = verify(`${cookies.user_token}`, "secret") as {
+		_doc: iUser;
+	};
+	if (!user) throw new Error("token is not valid");
+	console.log(user);
+	return user;
 }
