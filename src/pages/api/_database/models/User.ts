@@ -12,7 +12,6 @@ const userSchema = new Schema<iUser>(
 		},
 		password: {
 			type: "string",
-			required: [true, "password is required"],
 			maxlength: [30, "password max length is 30 characters"],
 		},
 	},

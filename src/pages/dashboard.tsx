@@ -1,6 +1,7 @@
 import Button from "@/atoms/Button";
 import Title from "@/atoms/Title";
 import axios from "axios";
+import { signOut } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -19,6 +20,7 @@ export default function dashboard() {
 
 	const handleLogout = async () => {
 		try {
+			signOut();
 			await axios.post("/api/users/logout");
 			router.push("/");
 			alert("logged out");

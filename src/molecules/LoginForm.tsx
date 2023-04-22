@@ -1,19 +1,31 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "@/atoms/Button";
 import Image from "@/atoms/Image";
 import Input from "@/atoms/Input";
 import Title from "@/atoms/Title";
 import { useRouter } from "next/router";
-import { iUser } from "@/interface/user";
+import { iLoginCredentials } from "@/interface/user";
 import { emailValidator, passwordValidator } from "@/validation";
+import { signIn, useSession } from "next-auth/react";
 
 export default function LoginForm() {
 	const router = useRouter();
-	const [credentials, setCredentials] = useState<iUser>({
+	const { data: session, status } = useSession();
+
+	const [credentials, setCredentials] = useState<iLoginCredentials>({
 		email: "",
 		password: "",
 	});
+
+	useEffect(() => {
+		(async () => {
+			if (session && session.user) {
+				await axios.post("/api/auth/login", { email: session.user.email });
+				router.push("/dashboard");
+			}
+		})();
+	}, [session]);
 
 	const validateCredentials = () => {
 		if (!emailValidator(credentials.email))
@@ -40,68 +52,73 @@ export default function LoginForm() {
 	};
 
 	return (
-		<form onSubmit={handleSubmit} className="flex flex-col items-center">
-			<Title>TyC Sports</Title>
-			<span className="my-1 px-5 text-gray-300 whitespace-nowrap">
-				Podés ingresar con tu cuenta de:
-			</span>
-			<Button
-				className="w-full my-1 p-2 relative text-center"
-				type="facebook"
-				onClick={() => alert("logged")}
-			>
-				<Image
-					className="h-full w-auto absolute top-0 left-0 my-auto"
-					type="facebook-logo"
+		status === "unauthenticated" && (
+			<form onSubmit={handleSubmit} className="flex flex-col items-center">
+				<Title>TyC Sports</Title>
+				<span className="my-1 px-5 text-gray-300 whitespace-nowrap">
+					Podés ingresar con tu cuenta de:
+				</span>
+				<Button
+					className="w-full my-1 p-2 relative text-center"
+					type="facebook"
+					onClick={() => signIn("facebook")}
+				>
+					<Image
+						className="h-full w-auto absolute top-0 left-0 my-auto"
+						type="facebook-logo"
+					/>
+					Facebook
+				</Button>
+				<Button
+					className="w-full my-1 p-2 relative text-center"
+					type="google"
+					onClick={() => {
+						router.push("/dashboard");
+						signIn("google");
+					}}
+				>
+					<Image
+						className="h-full w-auto absolute top-0 left-0 my-auto"
+						type="google-logo"
+					/>
+					Google
+				</Button>
+				<hr className="w-full my-3 border-gray-500" />
+				<span className="my-1 px-5 text-gray-300 whitespace-nowrap">
+					o con tu cuenta de Email:
+				</span>
+				<Input
+					className={`my-1 ${
+						!!credentials.email.length &&
+						!emailValidator(credentials.email) &&
+						"border-b-4 border-red-500"
+					}`}
+					type="email"
+					placeholder="email"
+					name="email"
+					onChange={handleChange}
+					value={credentials.email}
+					title={"insert a valid email"}
 				/>
-				Facebook
-			</Button>
-			<Button
-				className="w-full my-1 p-2 relative text-center"
-				type="google"
-				onClick={() => alert("logged")}
-			>
-				<Image
-					className="h-full w-auto absolute top-0 left-0 my-auto"
-					type="google-logo"
+				<Input
+					className={`my-1 ${
+						!!credentials.password.length &&
+						!passwordValidator(credentials.password) &&
+						"border-b-4 border-red-500"
+					}`}
+					type="password"
+					placeholder="password"
+					name="password"
+					onChange={handleChange}
+					value={credentials.password}
+					title={
+						"password must have 8 characters, 1 capital letter, 1 lowercase and 1 number"
+					}
 				/>
-				Google
-			</Button>
-			<hr className="w-full my-3 border-gray-500" />
-			<span className="my-1 px-5 text-gray-300 whitespace-nowrap">
-				o con tu cuenta de Email:
-			</span>
-			<Input
-				className={`my-1 ${
-					!!credentials.email.length &&
-					!emailValidator(credentials.email) &&
-					"border-b-4 border-red-500"
-				}`}
-				type="email"
-				placeholder="email"
-				name="email"
-				onChange={handleChange}
-				value={credentials.email}
-				title={"insert a valid email"}
-			/>
-			<Input
-				className={`my-1 ${
-					!!credentials.password.length &&
-					!passwordValidator(credentials.password) &&
-					"border-b-4 border-red-500"
-				}`}
-				type="password"
-				placeholder="password"
-				name="password"
-				onChange={handleChange}
-				value={credentials.password}
-				title={
-					"password must have 8 characters, 1 capital letter, 1 lowercase and 1 number"
-				}
-			/>
-			<Button type="submit" className="my-1">
-				Ingresar
-			</Button>
-		</form>
+				<Button type="submit" className="my-1">
+					Ingresar
+				</Button>
+			</form>
+		)
 	);
 }

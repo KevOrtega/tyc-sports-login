@@ -16,6 +16,9 @@ export default async function registerHandler(
 		if (req.method !== "POST")
 			throw new Error("POST method is the only supported");
 
+		if (!req.body.email || !req.body.password)
+			throw new Error("email and password are required");
+
 		const is_user_already_registered = await getUserByEmail(req.body.email);
 		if (is_user_already_registered)
 			throw new Error(`user with email ${req.body.email} already exists`);
@@ -27,8 +30,8 @@ export default async function registerHandler(
 
 		const serialized = serializeUser(user);
 		res.setHeader("Set-Cookie", serialized);
-		res.status(200).send("user created successfully");
+		return res.status(200).send("user created successfully");
 	} catch (error) {
-		res.status(300).send(`${error}`);
+		return res.status(300).send(`${error}`);
 	}
 }

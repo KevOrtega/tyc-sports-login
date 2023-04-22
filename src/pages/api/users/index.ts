@@ -1,12 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { database } from "@/pages/api/_database";
 import { getUserByEmail, verifyUserToken } from "@/pages/api/_services/users";
+import { iUser } from "@/interface/user";
 
 database();
 
 export default async function userHandler(
 	req: NextApiRequest,
-	res: NextApiResponse<{ email: string } | string>
+	res: NextApiResponse<iUser | string>
 ) {
 	try {
 		if (req.method !== "GET")
@@ -16,8 +17,8 @@ export default async function userHandler(
 		const user_found = await getUserByEmail(user.email);
 		if (!user_found) throw new Error("user incorrect");
 
-		res.status(200).send({ email: user_found.email });
+		return res.status(200).send({ email: user_found.email });
 	} catch (error) {
-		res.status(400).send(`${error}`);
+		return res.status(400).send(`${error}`);
 	}
 }
