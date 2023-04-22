@@ -11,21 +11,10 @@ import { signIn, useSession } from "next-auth/react";
 
 export default function LoginForm() {
 	const router = useRouter();
-	const { data: session, status } = useSession();
-
 	const [credentials, setCredentials] = useState<iLoginCredentials>({
 		email: "",
 		password: "",
 	});
-
-	useEffect(() => {
-		(async () => {
-			if (session && session.user) {
-				await axios.post("/api/auth/login", { email: session.user.email });
-				router.push("/dashboard");
-			}
-		})();
-	}, [session]);
 
 	const validateCredentials = () => {
 		if (!emailValidator(credentials.email))
@@ -51,7 +40,7 @@ export default function LoginForm() {
 		}
 	};
 
-	return status === "unauthenticated" ? (
+	return (
 		<form onSubmit={handleSubmit} className="flex flex-col items-center">
 			<Title>TyC Sports</Title>
 			<span className="my-1 px-5 text-gray-300 whitespace-nowrap">
@@ -118,5 +107,5 @@ export default function LoginForm() {
 				Ingresar
 			</Button>
 		</form>
-	) : null;
+	);
 }
