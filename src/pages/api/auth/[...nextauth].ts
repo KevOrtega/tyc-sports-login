@@ -14,6 +14,7 @@ export const authOptions = {
 			clientSecret: `${process.env.facebook_secret_key}`,
 		}),
 	],
+	secret: `${process.env.SECRET}`,
 };
 
 export default NextAuth(authOptions);
