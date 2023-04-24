@@ -19,9 +19,13 @@ export default async function registerHandler(
 		if (!req.body.email || !req.body.password)
 			throw new Error("email and password are required");
 
-		const is_user_already_registered = await getUserByEmail(req.body.email);
-		if (is_user_already_registered)
-			throw new Error(`user with email ${req.body.email} already exists`);
+		// check if user already exists
+		await getUserByEmail(req.body.email).then(
+			() => {
+				throw new Error(`user with email ${req.body.email} already exists`);
+			},
+			() => {}
+		);
 
 		const user = await createUser({
 			email: req.body.email,
