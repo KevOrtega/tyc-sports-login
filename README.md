@@ -68,9 +68,10 @@ To get a local copy up and running follow these simple steps.
   ```sh
   npm install npm@latest -g
   ```
-  2. Generate a next auth secret key https://generate-secret.vercel.app/32
-  3. Obtain your google ID and Google Secret Key to paste in dotenv config https://console.cloud.google.com/apis
-  4. Obtain your facebook ID and Facebook Secret Key to paste in dotenv config https://developers.facebook.com/apps
+
+2. Generate a next auth secret key https://generate-secret.vercel.app/32
+3. Obtain your google ID and Google Secret Key to paste in dotenv config https://console.cloud.google.com/apis
+4. Obtain your facebook ID and Facebook Secret Key to paste in dotenv config https://developers.facebook.com/apps
 
 ### Installation
 
